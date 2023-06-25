@@ -11,28 +11,23 @@ import {
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function Card() {
+export default function Card({ product }) {
+  const { name, price, description, imageUrl } = product;
   return (
     <MCard sx={{ maxWidth: 350 }}>
       <CardActionArea>
-        <CardMedia
-          component='img'
-          height='250'
-          image='https://m.media-amazon.com/images/I/715TLEvzxUS._SY500_.jpg'
-          alt='green iguana'
-        />
+        <CardMedia component='img' height='250' image={imageUrl} alt='green iguana' />
         <CardContent>
           <Box display={'flex'} justifyContent={'space-between'}>
             <Typography gutterBottom variant='h6' component='div'>
-              Shoes
+              {name}
             </Typography>
             <Typography gutterBottom variant='h6' component='div'>
-              Rs. 1500
+              Rs. {price}
             </Typography>
           </Box>
           <Typography variant='body2' color='text.secondary'>
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+            {description}
           </Typography>
         </CardContent>
       </CardActionArea>
