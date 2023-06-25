@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import Card from '../card/Card';
 import CategoryToggle from '../category_toggle/CategoryToggle';
 import SortSelector from '../sort_selector/SortSelector';
