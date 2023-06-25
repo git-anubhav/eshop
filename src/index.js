@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Home from './components/home/Home';
+import Products from './components/products/Products';
 import Login from './components/login/Login';
+import SignUp from './components/signup/SignUp';
 import { ThemeProvider } from '@mui/material';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './layout';
@@ -10,12 +11,16 @@ import './index.css';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />,
+    path: '/products',
+    element: <Products />,
   },
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/signup',
+    element: <SignUp />,
   },
 ]);
 
