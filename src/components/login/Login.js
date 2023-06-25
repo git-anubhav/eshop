@@ -1,8 +1,23 @@
+import { useState } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Copyright from '../copyright/Copyright';
+import { login } from '../../common/services/auth.service';
 
 export default function Login() {
+  const [state, setState] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    const response = await login(state);
+  };
+
   return (
     <Box display={'flex'} justifyContent={'center'} pt={5}>
       <Box
@@ -27,18 +42,20 @@ export default function Login() {
         </Typography>
         <TextField
           required
-          id='email'
+          name='email'
           label='Email'
+          onChange={handleChange}
           sx={{ width: '20rem', marginBottom: '1.5rem' }}
         />
         <TextField
           required
-          id='password'
+          name='password'
           label='Password'
           type='password'
+          onChange={handleChange}
           sx={{ width: '20rem', marginBottom: '2rem' }}
         />
-        <Button fullWidth variant='contained'>
+        <Button fullWidth variant='contained' onClick={handleSubmit}>
           SIGN IN
         </Button>
         <Typography variant='subtitle2' mt={3}>
