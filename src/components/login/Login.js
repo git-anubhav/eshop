@@ -34,14 +34,9 @@ export default function Login() {
       <Button fullWidth variant='contained'>
         SIGN IN
       </Button>
-      <Typography
-        variant='subtitle2'
-        mt={3}
-        alignSelf={'flex-start'}
-        color={'primary'}
-        sx={{ textDecoration: 'underline' }}
-      >
-        Don't have an account? Sign Up
+      <Typography variant='subtitle2' mt={3}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a href='#'>Don't have an account? Sign Up</a>
       </Typography>
       <Copyright />
     </Box>

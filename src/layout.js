@@ -6,9 +6,7 @@ export default function Layout({ children }) {
   return (
     <React.Fragment>
       <NavBar />
-      <Box display={'flex'} justifyContent={'center'} pt={7}>
-        {children}
-      </Box>
+      <Box width={'98vw'}>{children}</Box>
     </React.Fragment>
   );
 }
