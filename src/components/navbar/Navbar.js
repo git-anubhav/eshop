@@ -1,11 +1,11 @@
 import { styled, alpha } from '@mui/material/styles';
 import { AppBar, Toolbar, Box, Typography, InputBase, Button } from '@mui/material';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
-import NavLink from '../nav-link/NavLink';
+import NavLink from '../nav_link/NavLink';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 const Search = styled('div')(({ theme }) => ({
@@ -73,7 +73,7 @@ export default function NavBar({ search, setSearch }) {
               marginLeft: 'auto',
             }}
           >
-            <Search>
+            <Search sx={{ visibility: search !== undefined ? 'visible' : 'hidden' }}>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>

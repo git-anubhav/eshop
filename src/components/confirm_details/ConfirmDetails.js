@@ -1,29 +1,26 @@
 import { Fragment } from 'react';
 import { Box, Card, CardContent, Typography, Button } from '@mui/material';
 
-export default function BasicCard() {
+export default function BasicCard({ product, quantity, address }) {
   return (
     <Fragment>
       <Box display='flex' width='56%' justifyContent='center' ml={3}>
         <Card sx={{ minWidth: '33rem', paddingBottom: '4rem' }}>
           <CardContent>
             <Typography variant='h4' mb={1}>
-              Shoes
+              {product.name}
             </Typography>
             <Typography variant='body2' mb={1}>
-              Quantity: 1
+              Quantity: {quantity}
             </Typography>
             <Typography variant='body2' mb={2}>
-              Category: <strong>Footwear</strong>
+              Category: <strong>{product.category}</strong>
             </Typography>
             <Typography variant='body2' mb={1}>
-              <i>
-                lorem ipsum something something lorem ipsum something something lorem ipsum
-                something something lorem ipsum something something lorem ipsum something something
-              </i>
+              <i>{product.description}</i>
             </Typography>
             <Typography variant='h6' mt={2} color='secondary'>
-              Rs. 1000000
+              $ {parseFloat(product.price) * quantity}
             </Typography>
           </CardContent>
         </Card>
@@ -33,16 +30,14 @@ export default function BasicCard() {
               Address Details :
             </Typography>
             <Typography variant='body2' mb={1}>
-              lorem ipsum something <br />
-              something lorem ipsum <br />
-              something something
+              {address.name} <br />
+              Contact Number: {address.contactNumber} <br />
+              {address.street}, {address.city} <br />
+              {address.state} <br />
+              {address.zipcode}
             </Typography>
           </CardContent>
         </Card>
-      </Box>
-      <Box mt={6}>
-        <Button>BACK</Button>
-        <Button variant='contained'>PLACE ORDER</Button>
       </Box>
     </Fragment>
   );

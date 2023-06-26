@@ -12,13 +12,21 @@ import {
 } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Link } from 'react-router-dom';
 
 export default function Card({ product }) {
-  const { name, price, description, imageUrl } = product;
+  const { id, name, price, description, imageUrl } = product;
   const [view, setView] = useState(Cookies.get('role'));
 
   return (
-    <MCard sx={{ maxWidth: 350 }}>
+    <MCard
+      sx={{
+        maxWidth: 350,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}
+    >
       <CardActionArea>
         <CardMedia component='img' height='250' image={imageUrl} alt='green iguana' />
         <CardContent>
@@ -36,9 +44,11 @@ export default function Card({ product }) {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button size='small' color='primary' variant='contained'>
-          Buy
-        </Button>
+        <Link to={`/product?id=${id}`}>
+          <Button size='small' color='primary' variant='contained'>
+            Buy
+          </Button>
+        </Link>
         {view === 'ADMIN' && (
           <Box>
             <ModeEditIcon color='grey' sx={{ marginRight: '1rem' }} />

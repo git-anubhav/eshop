@@ -1,47 +1,73 @@
-import { Box, Typography, Chip, TextField, Button } from '@mui/material';
+import { Box, Typography, Chip, TextField, Button, CardMedia } from '@mui/material';
 import './ProductDetails.css';
+import { Fragment, useEffect, useState } from 'react';
+import { getProduct } from '../../common/services/products.service';
+import { useSearchParams } from 'react-router-dom';
 
-export default function ProductDetails() {
+export default function ProductDetails({
+  quantity,
+  setQuantity,
+  step,
+  setStep,
+  product,
+  setProduct,
+}) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const id = searchParams.get('id');
+
+  useEffect(() => {
+    getProduct(id).then((r) => setProduct(r.data));
+  }, [id]);
+
+  const handleChange = (e) => {
+    setQuantity(e.target.value);
+  };
+
+  const handlePlaceOrder = () => {
+    setStep(0);
+  };
+
   return (
     <Box display={'flex'} mt={5}>
-      <img
-        src='https://images-americanas.b2w.io/produtos/01/00/img/4864624/1/4864624187_1GG.jpg'
-        alt='iphone'
-        className='product-img'
-      />
-      <Box alignSelf={'flex-start'} p={2}>
+      <img src={product.imageUrl} alt={product.name} className='product-img' />
+      <Box alignSelf={'flex-start'} p={2} pl={4} maxWidth='30rem'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography variant='h4' mr={2}>
-            iPhone 12
+            {product.name}
           </Typography>
-          <Chip label='Available Quantity: 146' color={'primary'} />
+          <Chip label={`Available Quantity: ${product.availableItems}`} color={'primary'} />
         </Box>
-        {/* <Typography variant='subtitle1' mt={1}>
-          Quantity: 1
-        </Typography> */}
+        {step === 0 && (
+          <Typography variant='subtitle1' mt={1}>
+            Quantity: {quantity}
+          </Typography>
+        )}
         <Typography variant='subtitle1' mt={1}>
-          Category: <strong>Electronics</strong>
+          Category: <strong>{product.category}</strong>
         </Typography>
         <Typography variant='subtitle2' mt={1}>
-          <i>A14 bionic something something lorem ipsum something something</i>
+          <i>{product.description}</i>
         </Typography>
         <Typography variant='h6' mt={2} color='secondary'>
-          Rs. 1000000
+          $ {step < 0 ? product.price : parseFloat(product.price) * quantity}
         </Typography>
-        <TextField
-          required
-          id='enterQuantity'
-          label='Enter Quantity'
-          type='number'
-          sx={{ width: '18rem', marginTop: '1.5rem' }}
-        />
-        <Box mt={3}>
-          <Button variant='contained'>PLACE ORDER</Button>
-        </Box>
-        {/* <Box mt={6}>
-          <Button>BACK</Button>
-          <Button variant='contained'>NEXT</Button>
-        </Box> */}
+        {step < 0 && (
+          <Fragment>
+            <TextField
+              required
+              value={quantity}
+              label='Enter Quantity'
+              type='number'
+              onChange={handleChange}
+              sx={{ width: '18rem', marginTop: '1.5rem' }}
+            />
+            <Box mt={3}>
+              <Button variant='contained' onClick={handlePlaceOrder}>
+                PLACE ORDER
+              </Button>
+            </Box>
+          </Fragment>
+        )}
       </Box>
     </Box>
   );

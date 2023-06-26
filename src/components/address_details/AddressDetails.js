@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   InputLabel,
@@ -9,12 +9,36 @@ import {
   Button,
   Typography,
 } from '@mui/material';
+import { addAddress, getAddresses } from '../../common/services/address.service';
 
-export default function SortSelector() {
-  const [address, setAddress] = useState('');
+export default function AddressDetails({ address, setAddress }) {
+  const [addresses, setAddresses] = useState([]);
+  const [unsavedAddress, setUnsavedAddress] = useState({
+    name: '',
+    contactNumber: '',
+    street: '',
+    city: '',
+    state: '',
+    landmark: '',
+    zipcode: '',
+  });
 
-  const handleChange = (event) => {
+  useEffect(() => {
+    getAddresses().then((r) => {
+      setAddresses(r.data);
+    });
+  }, []);
+
+  const handleAddress = (event) => {
     setAddress(event.target.value);
+  };
+
+  const handleChange = (e) => {
+    setUnsavedAddress({ ...unsavedAddress, [e.target.name]: e.target.value });
+  };
+
+  const handleSaveAddress = async (e) => {
+    const response = await addAddress(unsavedAddress);
   };
 
   return (
@@ -24,45 +48,72 @@ export default function SortSelector() {
         <Select
           value={address}
           label='Select Address'
-          onChange={handleChange}
+          onChange={handleAddress}
           sx={{ width: '30rem' }}
         >
-          <MenuItem value={'default'}>Default</MenuItem>
+          {addresses.map((address) => (
+            <MenuItem
+              key={address.id}
+              value={address}
+            >{`${address.name}--->${address.street}, ${address.city}`}</MenuItem>
+          ))}
         </Select>
       </FormControl>
       <Typography my={2}>OR</Typography>
       <Typography variant='h6' mb={2}>
         Add Address
       </Typography>
-      <TextField required id='ame' label='Name' sx={{ width: '20rem', marginBottom: '1rem' }} />
       <TextField
         required
-        id='contactNumber'
+        name='name'
+        label='Name'
+        onChange={handleChange}
+        sx={{ width: '20rem', marginBottom: '1rem' }}
+      />
+      <TextField
+        required
+        name='contactNumber'
         label='Contact Number'
+        onChange={handleChange}
         sx={{ width: '20rem', marginBottom: '1.5rem' }}
       />
       <TextField
         required
-        id='street'
+        name='street'
         label='Street'
+        onChange={handleChange}
         sx={{ width: '20rem', marginBottom: '1rem' }}
       />
-      <TextField required id='city' label='City' sx={{ width: '20rem', marginBottom: '1rem' }} />
-      <TextField required id='state' label='State' sx={{ width: '20rem', marginBottom: '1rem' }} />
-      <TextField id='landmark' label='Landmark' sx={{ width: '20rem', marginBottom: '1rem' }} />
       <TextField
         required
-        id='state'
-        label='Zip Code'
+        name='city'
+        label='City'
+        onChange={handleChange}
         sx={{ width: '20rem', marginBottom: '1rem' }}
       />
-      <Button variant='contained' sx={{ width: '20rem' }}>
+      <TextField
+        required
+        name='state'
+        label='State'
+        onChange={handleChange}
+        sx={{ width: '20rem', marginBottom: '1rem' }}
+      />
+      <TextField
+        name='landmark'
+        label='Landmark'
+        onChange={handleChange}
+        sx={{ width: '20rem', marginBottom: '1rem' }}
+      />
+      <TextField
+        required
+        name='zipcode'
+        label='Zip Code'
+        onChange={handleChange}
+        sx={{ width: '20rem', marginBottom: '1rem' }}
+      />
+      <Button variant='contained' sx={{ width: '20rem' }} onClick={handleSaveAddress}>
         SAVE ADDRESS
       </Button>
-      <Box m={3}>
-        <Button>BACK</Button>
-        <Button variant='contained'>NEXT</Button>
-      </Box>
     </Box>
   );
 }
