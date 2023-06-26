@@ -19,4 +19,22 @@ const getProducts = async () => {
     });
 };
 
-export { getProducts };
+const getCategories = async () => {
+  const token = Cookies.get('token');
+  return axios
+    .get('/api/products/categories', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response) {
+        return error.response;
+      }
+    });
+};
+
+export { getProducts, getCategories };

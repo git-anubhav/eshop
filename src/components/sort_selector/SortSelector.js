@@ -1,18 +1,15 @@
-import { useState } from 'react';
 import { Box, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
 
-export default function SortSelector() {
-  const [sortBy, setSortBy] = useState('');
-
+export default function SortSelector({ sort, setSort }) {
   const handleChange = (event) => {
-    setSortBy(event.target.value);
+    setSort(event.target.value);
   };
 
   return (
     <Box sx={{ minWidth: 300, alignSelf: 'flex-start' }}>
       <FormControl fullWidth>
-        <InputLabel>Sort By</InputLabel>
-        <Select value={sortBy} label='Age' onChange={handleChange}>
+        <InputLabel>Sort</InputLabel>
+        <Select value={sort} label='Age' onChange={handleChange}>
           <MenuItem value={'default'}>Default</MenuItem>
           <MenuItem value={'priceHighToLow'}>Price: High to Low</MenuItem>
           <MenuItem value={'priceLowToHigh'}>Price: Low to High</MenuItem>

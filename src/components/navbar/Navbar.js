@@ -40,7 +40,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function NavBar() {
+export default function NavBar({ search, setSearch }) {
   const [view, setView] = useState(Cookies.get('role'));
   const navigate = useNavigate();
 
@@ -50,6 +50,10 @@ export default function NavBar() {
     setView(undefined);
 
     navigate('/login');
+  };
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
   };
 
   return (
@@ -73,7 +77,12 @@ export default function NavBar() {
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
-              <StyledInputBase placeholder='Search…' inputProps={{ 'aria-label': 'search' }} />
+              <StyledInputBase
+                placeholder='Search…'
+                inputProps={{ 'aria-label': 'search' }}
+                value={search}
+                onChange={handleChange}
+              />
             </Search>
             <Box
               sx={{
