@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 
 const placeOrder = async (order) => {
   const token = Cookies.get('token');
+  order.user = '64982278c0d51d4407dea77b';
   return axios
     .post('/api/orders', order, {
       headers: {

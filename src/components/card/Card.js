@@ -17,7 +17,7 @@ import Modal from '../modal/Modal';
 
 export default function Card({ product, refresh, setRefresh }) {
   const { id, name, price, description, imageUrl } = product;
-  const [view, setView] = useState(Cookies.get('role'));
+  const [view] = useState(Cookies.get('role'));
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {

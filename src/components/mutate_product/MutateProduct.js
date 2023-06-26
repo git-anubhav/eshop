@@ -1,6 +1,4 @@
 import { Box, Typography, TextField, Button } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Copyright from '../copyright/Copyright';
 import { Fragment, useEffect } from 'react';
 import Navbar from '../navbar/Navbar';
 import { useSearchParams, useParams, useNavigate } from 'react-router-dom';
@@ -9,7 +7,7 @@ import { useState } from 'react';
 import { addProduct, modifyProduct } from '../../common/services/products.service';
 
 export default function MutateProduct() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [product, setProduct] = useState({
     id: '',
     name: '',

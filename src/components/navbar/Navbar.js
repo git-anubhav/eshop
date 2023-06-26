@@ -5,7 +5,7 @@ import NavLink from '../nav_link/NavLink';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Search = styled('div')(({ theme }) => ({

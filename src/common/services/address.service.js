@@ -21,6 +21,7 @@ const getAddresses = async () => {
 
 const addAddress = async (address) => {
   const token = Cookies.get('token');
+  address.user = '64982278c0d51d4407dea77b';
   return axios
     .post('/api/addresses', address, {
       headers: {

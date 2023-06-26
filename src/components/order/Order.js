@@ -1,10 +1,9 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import OrderProgressStepper from '../order_progress_stepper/OrderProgressStepper';
 import ProductDetails from '../product_details/ProductDetails';
 import AddressDetails from '../address_details/AddressDetails';
 import ConfirmDetails from '../confirm_details/ConfirmDetails';
-import Snackbar from '../snackbar/Snackbar';
 import NavBar from '../navbar/Navbar';
 import { placeOrder } from '../../common/services/orders.service';
 import { useNavigate } from 'react-router-dom';

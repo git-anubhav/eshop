@@ -1,6 +1,6 @@
-import { Box, Typography, Chip, TextField, Button, CardMedia } from '@mui/material';
+import { Box, Typography, Chip, TextField, Button } from '@mui/material';
 import './ProductDetails.css';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
 import { getProduct } from '../../common/services/products.service';
 import { useSearchParams } from 'react-router-dom';
 
@@ -12,11 +12,12 @@ export default function ProductDetails({
   product,
   setProduct,
 }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
 
   useEffect(() => {
     getProduct(id).then((r) => setProduct(r.data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleChange = (e) => {
