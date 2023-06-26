@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { getCategories } from '../../common/services/products.service';
 
-export default function CategoryToggle({ category, setCategory }) {
+export default function CategoryToggle({ category, setCategory, refresh }) {
   const [categories, setCategories] = useState([]);
 
   const handleCategory = (event, newCategory) => {
@@ -12,7 +12,7 @@ export default function CategoryToggle({ category, setCategory }) {
 
   useEffect(() => {
     getCategories().then((r) => setCategories(r.data));
-  }, []);
+  }, [refresh]);
 
   return (
     <ToggleButtonGroup

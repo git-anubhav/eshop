@@ -12,13 +12,14 @@ export default function Products() {
   const [category, setCategory] = useState('all');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('default');
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     getProducts().then((r) => {
       setProducts(r.data);
       setAllProducts(r.data);
     });
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     // filter by search
@@ -51,12 +52,12 @@ export default function Products() {
     <Fragment>
       <Navbar search={search} setSearch={setSearch} />
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} px={9}>
-        <CategoryToggle category={category} setCategory={setCategory} />
+        <CategoryToggle category={category} setCategory={setCategory} refresh={refresh} />
         <SortSelector sort={sort} setSort={setSort} />
         <Grid container px={3} py={5} spacing={7}>
           {products.map((product) => (
             <Grid key={product.id} item xs={4} display={'flex'} justifyContent={'center'}>
-              <Card product={product} />
+              <Card product={product} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
           ))}
         </Grid>
