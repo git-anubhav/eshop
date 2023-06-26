@@ -1,10 +1,12 @@
 import { styled, alpha } from '@mui/material/styles';
 import { AppBar, Toolbar, Box, Typography, InputBase, Button } from '@mui/material';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
+import NavLink from '../nav-link/NavLink';
 import SearchIcon from '@mui/icons-material/Search';
-import './Navbar.css';
-import NavbarMenuItem from '../navbar_menu_item/NavbarMenuItem';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate, Link } from 'react-router-dom';
+import './Navbar.css';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -39,7 +41,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
-  const [view, setView] = useState('ADMIN');
+  const [view, setView] = useState(Cookies.get('role'));
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Cookies.remove('token');
+    Cookies.remove('role');
+    setView(undefined);
+
+    navigate('/login');
+  };
 
   return (
     <AppBar position='static'>
@@ -48,7 +59,7 @@ export default function NavBar() {
         <Typography variant='h6' component='div' ml={2}>
           upGrad E-Shop
         </Typography>
-        {view === 'USER' && (
+        {view && (
           <Box
             sx={{
               width: '60%',
@@ -71,24 +82,31 @@ export default function NavBar() {
                 alignItems: 'center',
               }}
             >
-              <NavbarMenuItem>Home</NavbarMenuItem>
-              <NavbarMenuItem>AddProduct</NavbarMenuItem>
-              <Button variant='contained' color='error'>
+              <NavLink to='/'>Home</NavLink>
+              {view === 'ADMIN' && <NavLink to='/product/add'>AddProduct</NavLink>}
+              <Button
+                variant='contained'
+                color='error'
+                onClick={handleLogout}
+                sx={{ marginLeft: '2rem' }}
+              >
                 LOGOUT
               </Button>
             </Box>
           </Box>
         )}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            marginLeft: 'auto',
-          }}
-        >
-          <NavbarMenuItem>Login</NavbarMenuItem>
-          <NavbarMenuItem>Sign Up</NavbarMenuItem>
-        </Box>
+        {!view && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              marginLeft: 'auto',
+            }}
+          >
+            <NavLink to='/login'>Login</NavLink>
+            <NavLink to='/signup'>Sign Up</NavLink>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );

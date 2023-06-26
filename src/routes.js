@@ -5,11 +5,16 @@ import Order from './components/order/Order';
 import Login from './components/login/Login';
 import SignUp from './components/signup/SignUp';
 import MutateProduct from './components/mutate_product/MutateProduct';
+import PrivateRoute from './common/route_components/PrivateRoute';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Products />,
+    element: (
+      <PrivateRoute>
+        <Products />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/login',
@@ -21,10 +26,18 @@ export const router = createBrowserRouter([
   },
   {
     path: '/product',
-    element: <Order />,
+    element: (
+      <PrivateRoute>
+        <Order />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/product/:action',
-    element: <MutateProduct />,
+    element: (
+      <PrivateRoute>
+        <MutateProduct />
+      </PrivateRoute>
+    ),
   },
 ]);
