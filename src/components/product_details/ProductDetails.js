@@ -1,8 +1,8 @@
 import { Box, Typography, Chip, TextField, Button } from '@mui/material';
-import './ProductDetails.css';
 import { Fragment, useEffect } from 'react';
 import { getProduct } from '../../common/services/products.service';
 import { useSearchParams } from 'react-router-dom';
+import './ProductDetails.css';
 
 export default function ProductDetails({
   quantity,

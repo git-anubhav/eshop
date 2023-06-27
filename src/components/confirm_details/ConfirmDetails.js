@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 
-export default function BasicCard({ product, quantity, address }) {
+export default function ConfirmDetails({ product, quantity, address }) {
   return (
     <Fragment>
       <Box display='flex' width='56%' justifyContent='center' ml={3}>

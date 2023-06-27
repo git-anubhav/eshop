@@ -10,20 +10,20 @@ import AdminRoute from './common/route_components/AdminRoute';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: (
-      <PrivateRoute>
-        <Products />
-      </PrivateRoute>
-    ),
-  },
-  {
     path: '/login',
     element: <Login />,
   },
   {
     path: '/signup',
     element: <SignUp />,
+  },
+  {
+    path: '/',
+    element: (
+      <PrivateRoute>
+        <Products />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/product',
