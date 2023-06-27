@@ -7,11 +7,19 @@ import { login } from '../../common/services/auth.service';
 import { getUserRole } from '../../common/services/users.service';
 import { useNavigate, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Snackbar from '../snackbar/Snackbar';
 
 export default function Login() {
   const [state, setState] = useState({
     email: '',
     password: '',
+  });
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'right',
+    variant: 'success',
+    message: '',
   });
 
   const navigate = useNavigate();
@@ -22,6 +30,15 @@ export default function Login() {
 
   const handleSubmit = async () => {
     const response = await login(state);
+    if (response.status === 401) {
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        variant: 'error',
+        message: 'Invalid credentials',
+      });
+      return;
+    }
     Cookies.set('token', response.data.token);
 
     const role = await getUserRole();
@@ -33,6 +50,7 @@ export default function Login() {
   return (
     <Fragment>
       <NavBar />
+      <Snackbar state={snackbarState} setState={setSnackbarState} />
       <Box display={'flex'} justifyContent={'center'} pt={5}>
         <Box
           display={'flex'}

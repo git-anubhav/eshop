@@ -1,10 +1,11 @@
 import { Box, Typography, TextField, Button } from '@mui/material';
 import { Fragment, useEffect } from 'react';
 import Navbar from '../navbar/Navbar';
-import { useSearchParams, useParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
 import { getProduct } from '../../common/services/products.service';
 import { useState } from 'react';
 import { addProduct, modifyProduct } from '../../common/services/products.service';
+import Snackbar from '../snackbar/Snackbar';
 
 export default function MutateProduct() {
   const [searchParams] = useSearchParams();
@@ -18,9 +19,15 @@ export default function MutateProduct() {
     price: 0,
     availableItems: 0,
   });
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'right',
+    variant: 'success',
+    message: '',
+  });
   const { action } = useParams();
   const id = searchParams.get('id');
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (id !== null) {
@@ -30,12 +37,40 @@ export default function MutateProduct() {
 
   const handleAdd = async () => {
     const response = await addProduct(product);
-    navigate('/');
+    if (response.status === 400) {
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        variant: 'error',
+        message: 'Please enter all mandatory fields.',
+      });
+      return;
+    }
+    setSnackbarState({
+      ...snackbarState,
+      open: true,
+      variant: 'success',
+      message: `Product ${product.name} added successfully`,
+    });
   };
 
   const handleModify = async () => {
     const response = await modifyProduct(id, product);
-    navigate('/');
+    if (response.status === 400) {
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        variant: 'error',
+        message: 'Please enter all mandatory fields.',
+      });
+      return;
+    }
+    setSnackbarState({
+      ...snackbarState,
+      open: true,
+      variant: 'success',
+      message: `Product ${product.name} modified successfully`,
+    });
   };
 
   const handleChange = (e) => {
@@ -45,6 +80,7 @@ export default function MutateProduct() {
   return (
     <Fragment>
       <Navbar />
+      <Snackbar state={snackbarState} setState={setSnackbarState} />
       <Box display={'flex'} justifyContent={'center'} pt={5}>
         <Box display={'flex'} flexDirection={'column'} alignItems={'center'} maxWidth={'20rem'}>
           <Typography variant='h5' m={3}>
@@ -54,7 +90,7 @@ export default function MutateProduct() {
             required
             name='name'
             label='Name'
-            value={product.name}
+            value={product?.name}
             onChange={handleChange}
             sx={{ width: '20rem', marginBottom: '1rem' }}
           />
@@ -62,7 +98,7 @@ export default function MutateProduct() {
             required
             name='category'
             label='Category'
-            value={product.category}
+            value={product?.category}
             onChange={handleChange}
             sx={{ width: '20rem', marginBottom: '1rem' }}
           />
@@ -70,7 +106,7 @@ export default function MutateProduct() {
             required
             name='manufacturer'
             label='Manufacturer'
-            value={product.manufacturer}
+            value={product?.manufacturer}
             onChange={handleChange}
             sx={{ width: '20rem', marginBottom: '1rem' }}
           />
@@ -78,8 +114,9 @@ export default function MutateProduct() {
             required
             name='availableItems'
             label='Available Items'
-            value={product.availableItems}
+            value={product?.availableItems}
             onChange={handleChange}
+            type='number'
             sx={{ width: '20rem', marginBottom: '1rem' }}
           />
           <TextField
@@ -87,7 +124,7 @@ export default function MutateProduct() {
             name='price'
             label='Price'
             type='number'
-            value={product.price}
+            value={product?.price}
             onChange={handleChange}
             sx={{ width: '20rem', marginBottom: '1rem' }}
           />
@@ -95,7 +132,7 @@ export default function MutateProduct() {
             required
             name='imageUrl'
             label='Image URL'
-            value={product.imageUrl}
+            value={product?.imageUrl}
             onChange={handleChange}
             sx={{ width: '20rem', marginBottom: '1.5rem' }}
           />
@@ -103,16 +140,17 @@ export default function MutateProduct() {
             required
             name='description'
             label='Product Description'
-            value={product.description}
+            value={product?.description}
             onChange={handleChange}
             sx={{ width: '20rem', marginBottom: '1.5rem' }}
           />
           <Button
             fullWidth
             variant='contained'
+            sx={{ marginBottom: '3rem' }}
             onClick={action === 'add' ? handleAdd : handleModify}
           >
-            {action === 'add' ? 'ADD' : 'MODIFY'} PRODUCT
+            SAVE PRODUCT
           </Button>
         </Box>
       </Box>

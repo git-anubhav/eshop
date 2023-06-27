@@ -7,7 +7,7 @@ export default function CategoryToggle({ category, setCategory, refresh }) {
   const [categories, setCategories] = useState([]);
 
   const handleCategory = (event, newCategory) => {
-    setCategory(newCategory);
+    setCategory(newCategory ? newCategory : category);
   };
 
   useEffect(() => {

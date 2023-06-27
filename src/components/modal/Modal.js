@@ -7,15 +7,31 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { deleteProduct } from '../../common/services/products.service';
 
-export default function Modal({ open, setOpen, productId, refresh, setRefresh }) {
+export default function Modal({
+  open,
+  setOpen,
+  product,
+  refresh,
+  setRefresh,
+  snackbarState,
+  setSnackbarState,
+}) {
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleDelete = async () => {
-    const response = await deleteProduct(productId);
-    setOpen(false);
-    setRefresh(!refresh);
+    const response = await deleteProduct(product.id);
+    if (response.status === 204) {
+      setOpen(false);
+      setRefresh(!refresh);
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        variant: 'success',
+        message: `Product ${product.name} deleted successfully`,
+      });
+    }
   };
 
   return (

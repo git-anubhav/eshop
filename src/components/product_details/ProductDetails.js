@@ -11,6 +11,8 @@ export default function ProductDetails({
   setStep,
   product,
   setProduct,
+  snackbarState,
+  setSnackbarState,
 }) {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
@@ -25,7 +27,16 @@ export default function ProductDetails({
   };
 
   const handlePlaceOrder = () => {
-    setStep(0);
+    if (quantity) {
+      setStep(0);
+      return;
+    }
+    setSnackbarState({
+      ...snackbarState,
+      open: true,
+      variant: 'error',
+      message: 'Please enter valid quantity',
+    });
   };
 
   return (

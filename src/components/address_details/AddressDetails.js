@@ -10,8 +10,10 @@ import {
   Typography,
 } from '@mui/material';
 import { addAddress, getAddresses } from '../../common/services/address.service';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-export default function AddressDetails({ address, setAddress }) {
+export default function AddressDetails({ address, setAddress, snackbarState, setSnackbarState }) {
   const [addresses, setAddresses] = useState([]);
   const [unsavedAddress, setUnsavedAddress] = useState({
     name: '',
@@ -22,12 +24,23 @@ export default function AddressDetails({ address, setAddress }) {
     landmark: '',
     zipcode: '',
   });
+  const [refresh, setRefresh] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAddresses().then((r) => {
-      setAddresses(r.data);
+      if (r.status === 200) {
+        setAddresses(r.data);
+      } else if (r.status === 401) {
+        Cookies.remove('token');
+        Cookies.remove('role');
+        navigate('/login');
+      } else {
+        setAddresses([]);
+      }
     });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refresh]);
 
   const handleAddress = (event) => {
     setAddress(event.target.value);
@@ -39,6 +52,22 @@ export default function AddressDetails({ address, setAddress }) {
 
   const handleSaveAddress = async (e) => {
     const response = await addAddress(unsavedAddress);
+    if (response.status === 400) {
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        variant: 'error',
+        message: 'Please enter all mandatory fields.',
+      });
+      return;
+    }
+    setRefresh(!refresh);
+    setSnackbarState({
+      ...snackbarState,
+      open: true,
+      variant: 'success',
+      message: `Address added successfully`,
+    });
   };
 
   return (

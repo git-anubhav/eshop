@@ -7,6 +7,7 @@ import ConfirmDetails from '../confirm_details/ConfirmDetails';
 import NavBar from '../navbar/Navbar';
 import { placeOrder } from '../../common/services/orders.service';
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '../snackbar/Snackbar';
 
 const steps = ['Items', 'Select Address', 'Confirm Order'];
 
@@ -23,6 +24,13 @@ export default function Order() {
     price: 0,
     availableItems: 0,
   });
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'right',
+    variant: 'success',
+    message: '',
+  });
   const [address, setAddress] = useState();
   const navigate = useNavigate();
 
@@ -31,6 +39,15 @@ export default function Order() {
   };
 
   const handleNext = () => {
+    if (step === 1 && !address) {
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        variant: 'error',
+        message: 'Please select address',
+      });
+      return;
+    }
     setStep(step + 1);
   };
 
@@ -40,12 +57,20 @@ export default function Order() {
       product: product.id,
       address: address.id,
     });
-    navigate('/');
+
+    if (response.status === 201) {
+      navigate('/', {
+        state: {
+          message: 'Order created successfully',
+        },
+      });
+    }
   };
 
   return (
     <Fragment>
       <NavBar />
+      <Snackbar state={snackbarState} setState={setSnackbarState} />
       <Box display={'flex'} flexDirection='column' alignItems={'center'}>
         <OrderProgressStepper steps={steps} step={step} />
         {step <= 0 && (
@@ -56,9 +81,18 @@ export default function Order() {
             setStep={setStep}
             product={product}
             setProduct={setProduct}
+            snackbarState={snackbarState}
+            setSnackbarState={setSnackbarState}
           />
         )}
-        {step === 1 && <AddressDetails address={address} setAddress={setAddress} />}
+        {step === 1 && (
+          <AddressDetails
+            address={address}
+            setAddress={setAddress}
+            snackbarState={snackbarState}
+            setSnackbarState={setSnackbarState}
+          />
+        )}
         {step === 2 && <ConfirmDetails product={product} quantity={quantity} address={address} />}
       </Box>
       {step >= 0 && (

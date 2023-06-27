@@ -4,7 +4,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Copyright from '../copyright/Copyright';
 import { signUp } from '../../common/services/auth.service';
 import { useNavigate, Link } from 'react-router-dom';
-import NavBar from '../navbar/Navbar';
+import Navbar from '../navbar/Navbar';
+import Snackbar from '../snackbar/Snackbar';
 
 export default function SignUp() {
   const [state, setState] = useState({
@@ -15,6 +16,13 @@ export default function SignUp() {
     lastName: '',
     contactNumber: '',
   });
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'right',
+    variant: 'success',
+    message: '',
+  });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,12 +31,22 @@ export default function SignUp() {
 
   const handleSubmit = async () => {
     const response = await signUp(state);
+    if (response.status === 400) {
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        variant: 'error',
+        message: 'Please enter all mandatory fields.',
+      });
+      return;
+    }
     navigate('/login');
   };
 
   return (
     <Fragment>
-      <NavBar />
+      <Navbar />
+      <Snackbar state={snackbarState} setState={setSnackbarState} />
       <Box display={'flex'} justifyContent={'center'} pt={5}>
         <Box display={'flex'} flexDirection={'column'} alignItems={'center'} maxWidth={'20rem'}>
           <Box
@@ -89,7 +107,7 @@ export default function SignUp() {
             sx={{ width: '20rem', marginBottom: '1.5rem' }}
           />
           <Button fullWidth variant='contained' onClick={handleSubmit}>
-            SIGN IN
+            SIGN UP
           </Button>
           <Typography variant='subtitle2' mt={2} alignSelf={'flex-end'}>
             <Link to='/login'>Already have an account? Sign in</Link>

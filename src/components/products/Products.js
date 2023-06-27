@@ -5,6 +5,8 @@ import SortSelector from '../sort_selector/SortSelector';
 import Navbar from '../navbar/Navbar';
 import { Box, Grid } from '@mui/material';
 import { getProducts } from '../../common/services/products.service';
+import Snackbar from '../snackbar/Snackbar';
+import { useLocation } from 'react-router-dom';
 
 export default function Products() {
   const [allProducts, setAllProducts] = useState([]);
@@ -13,6 +15,23 @@ export default function Products() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('default');
   const [refresh, setRefresh] = useState(true);
+  const location = useLocation();
+  const { message } = location.state || {};
+
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'right',
+    variant: 'success',
+    message: '',
+  });
+
+  useEffect(() => {
+    if (message) {
+      setSnackbarState({ ...snackbarState, open: true, variant: 'success', message: message });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     getProducts().then((r) => {
@@ -51,13 +70,20 @@ export default function Products() {
   return (
     <Fragment>
       <Navbar search={search} setSearch={setSearch} />
+      <Snackbar state={snackbarState} setState={setSnackbarState} />
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} px={9}>
         <CategoryToggle category={category} setCategory={setCategory} refresh={refresh} />
         <SortSelector sort={sort} setSort={setSort} />
-        <Grid container px={3} py={5} spacing={7}>
+        <Grid container px={3} py={5} spacing={10} justifyContent='center'>
           {products.map((product) => (
-            <Grid key={product.id} item xs={4} display={'flex'} justifyContent={'center'}>
-              <Card product={product} refresh={refresh} setRefresh={setRefresh} />
+            <Grid key={product.id} item display={'flex'} justifyContent={'center'}>
+              <Card
+                product={product}
+                snackbarState={snackbarState}
+                setSnackbarState={setSnackbarState}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
             </Grid>
           ))}
         </Grid>

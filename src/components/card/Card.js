@@ -15,7 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
 import Modal from '../modal/Modal';
 
-export default function Card({ product, refresh, setRefresh }) {
+export default function Card({ product, refresh, setRefresh, snackbarState, setSnackbarState }) {
   const { id, name, price, description, imageUrl } = product;
   const [view] = useState(Cookies.get('role'));
   const [open, setOpen] = useState(false);
@@ -69,9 +69,11 @@ export default function Card({ product, refresh, setRefresh }) {
       <Modal
         open={open}
         setOpen={setOpen}
-        productId={product.id}
+        product={product}
         refresh={refresh}
         setRefresh={setRefresh}
+        snackbarState={snackbarState}
+        setSnackbarState={setSnackbarState}
       />
     </Fragment>
   );

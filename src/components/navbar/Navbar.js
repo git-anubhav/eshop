@@ -40,7 +40,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function NavBar({ search, setSearch }) {
+export default function Navbar({ search, setSearch }) {
   const [view, setView] = useState(Cookies.get('role'));
   const navigate = useNavigate();
 
